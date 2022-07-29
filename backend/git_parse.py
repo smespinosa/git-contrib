@@ -12,17 +12,18 @@ class GitLogParse:
         repo = Repo(self.repo)
         assert not repo.bare
 
-        head = repo.head
-        main_ref = head.reference
-        log = main_ref.log()
+        commits = repo.iter_commits('--all')
 
-        resp = {}
+        resp = {
+            "repo": repo.git_dir,
+            "commits": {},
+        }
 
-        for git_log in log:
-            actor = str(git_log.actor)
-            if actor not in resp.keys():
-                resp[actor] = []
+        for commit in commits:
+            actor = str(commit.committer.email)
+            if actor not in resp["commits"].keys():
+                resp["commits"][actor] = []
 
-            fixed_date = datetime.datetime.fromtimestamp(git_log.time[0] - git_log.time[1]).isoformat()
-            resp[actor].append(fixed_date)
+            fixed_date = datetime.datetime.fromtimestamp(commit.committed_date).isoformat()
+            resp["commits"][actor].append(fixed_date)
         return resp

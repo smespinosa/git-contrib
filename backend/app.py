@@ -1,3 +1,4 @@
+import os
 import falcon
 import falcon.asgi
 
@@ -6,17 +7,27 @@ import json
 from git_parse import GitLogParse
 
 class GitHandler:
+    def __init__(self, git_path: str):
+        self.git_path = git_path
+
     async def on_get(self, req, resp):
-        git_log_parse = GitLogParse("D:\\git\\git-contrib")
-        result = git_log_parse.parse()
-        print(result)
-        resp.text = json.dumps(result)
+        dirs =  [ f.path for f in os.scandir(self.git_path) if f.is_dir() ]
+        
+        git_results = [];
+        for maybe_git_dir in dirs:
+            try:
+                git_log_parse = GitLogParse(maybe_git_dir)
+                result = git_log_parse.parse()
+
+                git_results.append(result)
+            except Exception as e:
+                pass
+
+        resp.text = json.dumps(git_results)
         resp.status = falcon.HTTP_200
 
 app = falcon.asgi.App()
 
-# Resources are represented by long-lived class instances
-git_handler = GitHandler()
+git_handler = GitHandler("D:\\git\\")
 
-# things will handle all requests to the '/things' URL path
 app.add_route('/', git_handler)

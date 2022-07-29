@@ -10,7 +10,7 @@ class GitHandler:
     def __init__(self, git_path: str):
         self.git_path = git_path
 
-    async def on_get(self, req, resp):
+    async def on_get(self, req: falcon.Request, resp: falcon.Response):
         dirs =  [ f.path for f in os.scandir(self.git_path) if f.is_dir() ]
         
         git_results = [];

@@ -24,7 +24,7 @@ class DataContext:
 
     def get_repo_id_by_name(self, repo_name: str) -> int | None:
         result = self.__connection.execute(
-            f"SELECT id FROM repos WHERE name = '{repo_name}'"
+            "SELECT id FROM repos WHERE name = %s", (repo_name,)
         ).fetchone()
 
         if result is not None:
@@ -36,34 +36,34 @@ class DataContext:
         repo_id = self.get_repo_id_by_name(repo_name)
 
         if repo_id is None:
-            self.__connection.execute(
-                f"INSERT INTO repos (name) VALUES ('{repo_name}')"
-            )
+            self.__connection.execute("INSERT INTO repos (name) VALUES (%s)")
             self.__connection.commit()
-            repo_id = self.get_repo_id_by_name(repo_name)
+            repo_id = self.get_repo_id_by_name(repo_name, (repo_name,))
 
         return repo_id
 
     def insert_contribution(self, repo_id: int, email: str, date: str):
-        query = f"INSERT INTO contributions (repo_id, email, date) VALUES ({repo_id}, '{email}', '{date}')"
-        self.__connection.execute(query)
+        self.__connection.execute(
+            "INSERT INTO contributions (repo_id, email, date) VALUES (%s, %s, %s)",
+            (repo_id, email, date),
+        )
         self.__connection.commit()
 
     def get_contributions_by_contributor(self, email: str, year: int) -> list:
-        query = f"""
+        query = """
             SELECT
                 date,
                 count(date) as count
             FROM
                 contributions
             WHERE
-                date >= '{year}-01-01'
-                AND date < date_trunc('year', make_date({year}, 1, 1) + interval '1 year')
-                AND email = '{email}'
+                date >= make_date(%s, 1, 1)
+                AND date < date_trunc('year', make_date(%s, 1, 1) + interval '1 year')
+                AND email = %s
             GROUP BY date
             ORDER BY date
             """
-        result = self.__connection.execute(query).fetchall()
+        result = self.__connection.execute(query, (year, year, email)).fetchall()
 
         return result
 

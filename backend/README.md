@@ -9,3 +9,12 @@
 ## Installation
 
 `pip install falcon uvicorn GitPython`
+
+## Run
+
+`source .venv/bin/activate`
+`uvicorn app:app`
+
+## Test
+
+`curl http://localhost:8000`

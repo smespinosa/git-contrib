@@ -1,4 +1,3 @@
-from calendar import c
 from dotenv import load_dotenv
 import psycopg
 import os
@@ -37,7 +36,9 @@ class DataContext:
         repo_id = self.get_repo_id_by_name(repo_name)
 
         if repo_id is None:
-            self.__connection.execute(f"INSERT INTO repos (name) VALUES ('{repo_name}')")
+            self.__connection.execute(
+                f"INSERT INTO repos (name) VALUES ('{repo_name}')"
+            )
             self.__connection.commit()
             repo_id = self.get_repo_id_by_name(repo_name)
 
@@ -47,6 +48,24 @@ class DataContext:
         query = f"INSERT INTO contributions (repo_id, email, date) VALUES ({repo_id}, '{email}', '{date}')"
         self.__connection.execute(query)
         self.__connection.commit()
+
+    def get_contributions_by_contributor(self, email: str, year: int) -> list:
+        query = f"""
+            SELECT
+                date,
+                count(date) as count
+            FROM
+                contributions
+            WHERE
+                date >= '{year}-01-01'
+                AND date < date_trunc('year', make_date({year}, 1, 1) + interval '1 year')
+                AND email = '{email}'
+            GROUP BY date
+            ORDER BY date
+            """
+        result = self.__connection.execute(query).fetchall()
+
+        return result
 
 
 db_context = DataContext()

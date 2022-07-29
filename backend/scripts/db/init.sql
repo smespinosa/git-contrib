@@ -1,11 +1,11 @@
 
-create table public.repos
+create table repos
 (
     id   serial primary key,
     name text
 );
 
-create table public.contributions
+create table contributions
 (
     id      uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     repo_id integer,
@@ -14,4 +14,4 @@ create table public.contributions
 );
 
 create index ix_contribution_email_date
-    on public.contributions (email, date);
+    on contributions (email, date);

@@ -2,13 +2,16 @@
 
 ## Requirements
 - Python 3
+- Postgres Instance
 
 ### Optional
 - virtualenv
   
 ## Installation
 
-`pip install falcon uvicorn GitPython`
+`pip install falcon uvicorn GitPython python-dotenv`
+
+## Init Database
 
 ## Run
 

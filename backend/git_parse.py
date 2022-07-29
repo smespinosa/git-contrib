@@ -2,6 +2,7 @@ import datetime
 
 from git import Repo
 
+
 class GitLogParse:
     repo: str
 
@@ -12,7 +13,7 @@ class GitLogParse:
         repo = Repo(self.repo)
         assert not repo.bare
 
-        commits = repo.iter_commits('--all')
+        commits = repo.iter_commits("--all")
 
         resp = {
             "repo": repo.git_dir,
@@ -24,6 +25,8 @@ class GitLogParse:
             if actor not in resp["commits"].keys():
                 resp["commits"][actor] = []
 
-            fixed_date = datetime.datetime.fromtimestamp(commit.committed_date).isoformat()
+            fixed_date = datetime.datetime.fromtimestamp(
+                commit.committed_date
+            ).isoformat()
             resp["commits"][actor].append(fixed_date)
         return resp

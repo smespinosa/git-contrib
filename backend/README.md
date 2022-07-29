@@ -9,9 +9,21 @@
   
 ## Installation
 
-`pip install falcon uvicorn GitPython python-dotenv`
+```
+pip install falcon uvicorn GitPython python-dotenv psycopg[binary]
+cp .env-sample .env
+```
 
-## Init Database
+Configure .env with correct values
+
+## Database
+
+```
+docker pull postgres
+sh scripts\db\run.sh
+```
+
+Run `init.sql` against database
 
 ## Run
 

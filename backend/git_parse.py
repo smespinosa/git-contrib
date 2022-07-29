@@ -2,9 +2,12 @@ import datetime
 
 from git import Repo
 
+from data_context import db_context as db
+
 
 class GitLogParse:
     repo: str
+    repo_id: int
 
     def __init__(self, repo: str):
         self.repo = repo
@@ -13,20 +16,17 @@ class GitLogParse:
         repo = Repo(self.repo)
         assert not repo.bare
 
+        self.repo_id = db.create_or_select_repo(self.repo)
+
         commits = repo.iter_commits("--all")
 
-        resp = {
-            "repo": repo.git_dir,
-            "commits": {},
-        }
+        db.purge_contributions_by_repo_id(self.repo_id)
 
         for commit in commits:
             actor = commit.committer.email
-            if actor not in resp["commits"].keys():
-                resp["commits"][actor] = []
 
             fixed_date = datetime.datetime.fromtimestamp(
                 commit.committed_date
-            ).isoformat()
-            resp["commits"][actor].append(fixed_date)
-        return resp
+            ).strftime("%Y-%m-%d")
+
+            db.insert_contribution(self.repo_id, actor, fixed_date)

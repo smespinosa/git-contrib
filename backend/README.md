@@ -34,4 +34,7 @@ uvicorn app:app
 
 ## Test
 
-`curl http://localhost:8000`
+```
+curl http://localhost:8000/parse
+curl http://localhost:8000/query?email=test@test.com\&year=2021
+```

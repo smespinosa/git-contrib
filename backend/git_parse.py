@@ -20,7 +20,7 @@ class GitLogParse:
         }
 
         for commit in commits:
-            actor = str(commit.committer.email)
+            actor = commit.committer.email
             if actor not in resp["commits"].keys():
                 resp["commits"][actor] = []
 

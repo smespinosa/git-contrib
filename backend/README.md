@@ -12,8 +12,10 @@
 
 ## Run
 
-`source .venv/bin/activate`
-`uvicorn app:app`
+```
+source .venv/bin/activate
+uvicorn app:app
+```
 
 ## Test
 

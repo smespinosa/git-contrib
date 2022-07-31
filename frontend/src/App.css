@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-color: #000000;
+}
+
+.search-button {
+    border: none;
+    background-color: gray;
+    color: hotpink;
+    padding: 5px;
+    width: 80px;
+    margin: 20px 2px 0px 2px
+}

@@ -9,14 +9,20 @@ import YearSelectBox from './components/year-select-box/year-select-box.componen
 
 function App() {
   const [data, setData] = React.useState<ContributionResponse | null>(null)
-  const [searchEmailValue, setSearchEmailValue] = React.useState('')
-  const [searchYearValue, setSearchYearValue] = React.useState(2022)
+  const [searchEmailValue, setSearchEmailValue] = React.useState<string>('')
+  const [searchYearValue, setSearchYearValue] = React.useState<number>(2022)
 
   const fetchContributions = (email: string, year: number) => {
     const apiUrl = `http://localhost:8000/query?email=${email}&year=${year}`
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((results) => setData(results))
+    fetch(apiUrl).then(async (response) => {
+      if (response.status === 200) {
+        const result = await response.json()
+        setData(result)
+      } else {
+        console.error(response.text())
+        setData(null)
+      }
+    })
   }
 
   const onSearchChange = (event: any) => {
@@ -33,6 +39,7 @@ function App() {
       <SearchBox onChangeHandler={onSearchChange} />
       <YearSelectBox onChangeHandler={onYearChange} />
       <button
+        className="search-button"
         onClick={() => fetchContributions(searchEmailValue, searchYearValue)}
       >
         Search

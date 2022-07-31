@@ -1,0 +1,21 @@
+.heat-map-day {
+    border: 2px solid #000;
+    transition: scale(1.05);
+    width: 8px;
+    height: 8px;
+}
+
+.empty-cell {
+    background-color: #000;
+}
+
+
+.heat-map-week {
+    border: 1px;
+    border-color: hotpink;
+    display: inline-block;
+}
+
+.heat-map-container {
+    padding: 10px;
+}

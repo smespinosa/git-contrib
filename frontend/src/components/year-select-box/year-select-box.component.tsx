@@ -1,12 +1,12 @@
 import React from "react";
-
+import './year-select-box.style.css';
 type Props = {
   onChangeHandler: React.ChangeEventHandler<HTMLSelectElement>;
 };
 
 const YearSelectBox = ({ onChangeHandler }: Props) => {
   return (
-    <select onChange={onChangeHandler} defaultValue="2022">
+    <select className="year-select" onChange={onChangeHandler} defaultValue="2022">
         <option value="2010">2010</option>
         <option value="2011">2011</option>
         <option value="2012">2012</option>

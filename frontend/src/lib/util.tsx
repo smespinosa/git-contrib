@@ -7,13 +7,13 @@ export const gradient = (
 
   for (let i = 0; i < steps; i++) {
     const ratio = (Math.round(100 / steps) * i) / 100
-    const color = calculateMiddleColor(colorStart, colorEnd, ratio)
+    const color = calculateColorBetween(colorStart, colorEnd, ratio)
     colors.push(color)
   }
   return colors
 }
 
-export const calculateMiddleColor = (
+export const calculateColorBetween = (
   color1 = 'FF0000',
   color2 = '00FF00',
   ratio: number

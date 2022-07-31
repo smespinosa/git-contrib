@@ -1,12 +1,35 @@
-import React from "react";
-import * as d3 from "d3";
+import React from 'react'
+import { ContributionResponse } from '../../types/api'
 
 type Props = {
-    data: any
-};
-
-const HeatMap = ({data}: Props) => {
-    return <div id="d3-graph"></div>
+  data: ContributionResponse | null
 }
 
-export default HeatMap;
+const HeatMap = ({ data }: Props) => {
+  if (!data) {
+    return <></>
+  }
+
+  const weeks = data.weeks
+
+  console.log(weeks)
+  return (
+    <div className="heat-map">
+      {weeks.map((week: number[], idx: number) => {
+        return (
+          <div className="heat-map-week" key={idx}>
+            {week.map((day: number, idx: number) => {
+              return (
+                <div className="heat-map-day" key={idx}>
+                  {day}
+                </div>
+              )
+            })}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+export default HeatMap

@@ -1,6 +1,7 @@
 import React from 'react'
 import './heat-map.style.css'
 
+import Cell from '../cell/cell.component'
 import { ContributionResponse } from '../../types/api'
 import { gradient } from '../../lib/util'
 
@@ -13,15 +14,15 @@ const HeatMap = ({ data }: Props) => {
     return <></>
   }
 
-  const weeks = data.weeks
+  const { weeks } = data
   const color1 = 'FFFFFF'
   const color2 = 'FF69B4'
-  const steps = 5
+  const steps = 4
 
   const colors = gradient(color1, color2, steps)
 
   const maxRow = data.weeks.map(function (row) {
-    return Math.max.apply(Math, row)
+    return Math.max.apply(null, row)
   })
   const max = Math.max.apply(null, maxRow)
 
@@ -40,13 +41,7 @@ const HeatMap = ({ data }: Props) => {
                 cellColor = '#' + colors[colorIndex]
               }
 
-              return (
-                <div
-                  className={`heat-map-day`}
-                  style={{ backgroundColor: cellColor }}
-                  key={idx}
-                ></div>
-              )
+              return <Cell key={idx} cellColor={cellColor}></Cell>
             })}
           </div>
         )
